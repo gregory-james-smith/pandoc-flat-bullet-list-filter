@@ -1,9 +1,13 @@
 
-local supported_formats = {"latex", "html"}
-
+-- Default separators for each supported format
 local latex_separator = pandoc.RawInline("latex", " \\enspace $\\bullet$ \\enspace ")
-
 local default_separators = {latex = latex_separator}
+
+-- Make list of supported formats from those formats with default separators
+local supported_formats = {}
+for k,_ in pairs(default_separators) do
+    table.insert(supported_formats, k)
+end
 
 -- Name of the div class which indicates it should be a flat bullet list
 local class_name = "flat-bullet-list"
