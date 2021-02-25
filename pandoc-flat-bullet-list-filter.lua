@@ -4,6 +4,9 @@
 -- Name of the div class which indicates it should be a flat bullet list
 local class_name = "bullet-list"
 
+local bullet = pandoc.RawInline("latex", "\\enspace $\\bullet$ \\enspace")
+local space = pandoc.Space()
+
 function Div(elem)
     local classes = elem.classes
     if is_bullet_list_div(classes) then
@@ -14,8 +17,6 @@ function Div(elem)
             for i,j in ipairs(bullets) do
                 local section = j[1]
                 if i~= 1 then
-                    local bullet = pandoc.RawInline("latex", "\\enspace $\\bullet$ \\enspace")
-                    local space = pandoc.Space()
                     table.insert(text, space)
                     table.insert(text, bullet)
                     table.insert(text, space)
