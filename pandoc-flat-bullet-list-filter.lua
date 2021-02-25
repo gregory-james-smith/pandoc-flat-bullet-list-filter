@@ -29,7 +29,9 @@ function Div(elem)
             table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
         end
         local paragraph = pandoc.Para(text)
-        return pandoc.Div({paragraph}, {class = class_name})
+        -- Modify div content but keep other attributes
+        elem.content = {paragraph}
+        return elem
     end
     return elem
 end
