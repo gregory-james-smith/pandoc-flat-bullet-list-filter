@@ -1,7 +1,8 @@
 
 -- Default separators for each supported format
 local latex_separator = pandoc.RawInline("latex", " \\enspace $\\bullet$ \\enspace ")
-local default_separators = {latex = latex_separator}
+local html_separator = pandoc.RawInline("html", " &bull; ")
+local default_separators = {latex = latex_separator, html = html_separator}
 
 -- Make list of supported formats from those formats with default separators
 local supported_formats = {}
@@ -14,6 +15,7 @@ local class_name = "flat-bullet-list"
 
 function Div(elem)
     if not is_supported_format() then
+        print("Format " .. FORMAT .. " is not supported.")
         return elem
     end
     local contents = get_bullet_list_div_contents(elem)
