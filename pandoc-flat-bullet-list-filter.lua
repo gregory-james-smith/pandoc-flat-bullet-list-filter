@@ -8,29 +8,38 @@ local bullet = pandoc.RawInline("latex", "\\enspace $\\bullet$ \\enspace")
 local space = pandoc.Space()
 
 function Div(elem)
-    local classes = elem.classes
-    if is_bullet_list_div(classes) then
-        local content = elem.content[1]
-        if content.tag == "BulletList" then
-            local text = {}
-            local bullets = content.content
-            for i,j in ipairs(bullets) do
-                local section = j[1]
-                if i~= 1 then
-                    table.insert(text, space)
-                    table.insert(text, bullet)
-                    table.insert(text, space)
-                end
-                table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
+    local bullets = get_bullet_list_div_contents(elem)
+    if bullets then
+        local text = {}
+        for i,j in ipairs(bullets) do
+            local section = j[1]
+            if i~= 1 then
+                table.insert(text, space)
+                table.insert(text, bullet)
+                table.insert(text, space)
             end
-            local paragraph = pandoc.Para(text)
-            return pandoc.Div({paragraph}, {class = class_name})
+            table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
         end
+        local paragraph = pandoc.Para(text)
+        return pandoc.Div({paragraph}, {class = class_name})
     end
     return elem
 end
 
-function is_bullet_list_div(classes)
+-- Returns the contents of BulletList inside Div with configured class tag, otherwise returns nil
+function get_bullet_list_div_contents(elem)
+    if is_bullet_list_class(elem) then
+        local content = elem.content[1]
+        if content.tag == "BulletList" then
+            return content.content
+        end
+    end
+    return nil
+end
+
+-- Return true iff div has the configured class tag
+function is_bullet_list_class(elem)
+    local classes = elem.classes
     for _,i in pairs(classes) do
         if i == class_name then
             return true
