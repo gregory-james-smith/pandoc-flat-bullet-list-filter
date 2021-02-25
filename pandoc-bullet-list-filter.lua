@@ -1,9 +1,8 @@
 
+-- Constants
 
--- div
--- list
-
--- \textbullet
+-- Name of the div class which indicates it should be a flat bullet list
+local class_name = "bullet-list"
 
 function Div(elem)
     local classes = elem.classes
@@ -24,139 +23,15 @@ function Div(elem)
                 table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
             end
             local paragraph = pandoc.Para(text)
-            return pandoc.Div({paragraph}, {class = "bullet-list"})
+            return pandoc.Div({paragraph}, {class = class_name})
         end
     end
     return elem
 end
 
--- Div
--- list of blocks (para)
--- Para
--- list on inlines (str and rawline)
-
--- {
---     "t": "Div",
---     "c": [
---         [
---             "",
---             [
---                 "bullet-list"
---             ],
---             []
---         ],
---         [
---             {
---                 "t": "BulletList",
---                 "c": [
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "One"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Two"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Three"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Four"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Five"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Six"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Seven"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Eight"
---                                 }
---                             ]
---                         }
---                     ],
---                     [
---                         {
---                             "t": "Plain",
---                             "c": [
---                                 {
---                                     "t": "Str",
---                                     "c": "Nine"
---                                 }
---                             ]
---                         }
---                     ]
---                 ]
---             }
---         ]
---     ]
--- }
-
 function is_bullet_list_div(classes)
     for _,i in pairs(classes) do
-        if i == "bullet-list" then
+        if i == class_name then
             return true
         end
     end
