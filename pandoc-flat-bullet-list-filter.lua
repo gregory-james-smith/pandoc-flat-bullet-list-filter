@@ -22,7 +22,7 @@ function Div(elem)
         for i,j in ipairs(contents) do
             local section = j[1]
             if i ~= 1 then
-                table.insert(text, latex_separator)
+                table.insert(text, default_separators[FORMAT])
             end
             table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
         end
