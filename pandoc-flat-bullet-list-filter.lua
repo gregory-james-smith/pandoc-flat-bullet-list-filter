@@ -1,22 +1,24 @@
 
--- Constants
+local supported_formats = {"latex", "html"}
+
+local latex_separator = pandoc.RawInline("latex", " \\enspace $\\bullet$ \\enspace ")
+
+local default_separators = {latex = latex_separator}
 
 -- Name of the div class which indicates it should be a flat bullet list
-local class_name = "bullet-list"
-
-local bullet = pandoc.RawInline("latex", "\\enspace $\\bullet$ \\enspace")
-local space = pandoc.Space()
+local class_name = "flat-bullet-list"
 
 function Div(elem)
-    local bullets = get_bullet_list_div_contents(elem)
-    if bullets then
+    if not is_supported_format() then
+        return elem
+    end
+    local contents = get_bullet_list_div_contents(elem)
+    if contents then
         local text = {}
-        for i,j in ipairs(bullets) do
+        for i,j in ipairs(contents) do
             local section = j[1]
-            if i~= 1 then
-                table.insert(text, space)
-                table.insert(text, bullet)
-                table.insert(text, space)
+            if i ~= 1 then
+                table.insert(text, latex_separator)
             end
             table.insert(text, pandoc.Str(pandoc.utils.stringify(section)))
         end
@@ -24,6 +26,16 @@ function Div(elem)
         return pandoc.Div({paragraph}, {class = class_name})
     end
     return elem
+end
+
+-- Return true if the input format is supported
+function is_supported_format()
+    for _,i in pairs(supported_formats) do
+        if i == FORMAT then
+            return true
+        end
+    end
+    return false
 end
 
 -- Returns the contents of BulletList inside Div with configured class tag, otherwise returns nil
